@@ -9,7 +9,7 @@ Exists because the expensive failures are the silent ones:
 Nothing here is clever. It is all "print the number so a human notices" and
 "refuse when you do not actually know."
 """
-import hashlib, json, time, sys, os
+import hashlib, json, math, time, sys, os
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from statepath import load, save
@@ -193,7 +193,20 @@ def verification_gate(key, profile=None):
         return False, (f"last check failed ({d.get('reason', 'unknown')}). "
                        "The earlier approval no longer counts. Re-verify.")
 
-    age = (time.time() - d["checked_at"]) / 86400
+    # A timestamp is evidence about when something was true, so it has to be a
+    # real moment that has already happened. A future one produces a negative
+    # age and sails through the expiry check; a missing or non-numeric one used
+    # to raise rather than refuse, which is a crash where a reason belongs.
+    checked_at = d.get("checked_at")
+    if not isinstance(checked_at, (int, float)) or isinstance(checked_at, bool) \
+            or not math.isfinite(checked_at):
+        return False, ("this record has no usable check time, so its age cannot be "
+                       "established. Re-verify.")
+    now = time.time()
+    if checked_at > now + 300:          # a little slack for clock skew
+        return False, ("this record claims it was checked in the future, which means the "
+                       "clock or the file is wrong. Re-verify.")
+    age = (now - checked_at) / 86400
     if age > MAX_AGE_DAYS:
         return False, f"verification is {age:.1f} days old (max {MAX_AGE_DAYS}). Re-verify."
 

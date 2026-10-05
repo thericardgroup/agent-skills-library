@@ -303,6 +303,66 @@ def attendance_days(body):
     return 5          # "every weekday", "daily", "full-time in office"
 
 
+# Two offices joined by "and" is one job in two places. Joined by "or" it is a
+# choice. The difference decides whether an excluded city can be avoided, and
+# reading both as a choice approved a role that required attending a city the
+# user had ruled out.
+CONJOINED = re.compile(r'\band\b|\bas well as\b|\bplus\b|\bboth\b', re.I)
+ALTERNATIVE = re.compile(r'\bor\b|\beither\b', re.I)
+
+# Wording that frames the whole sentence as a choice, wherever it sits relative
+# to the place names. "Choose between A and B" is an offer of one, and reading
+# only the words between A and B finds "and" and calls it an obligation.
+CHOICE_FRAME = re.compile(
+    r'\bchoose\b|\bchoice\b|\byour pick\b|\bwhichever\b|\beither\b'
+    r'|\bone of\b|\bany of\b|\bbased (?:in|out of) (?:any|one)\b'
+    r'|\bwork from (?:any|one|whichever)\b', re.I)
+
+# Wording that actually mandates attending more than one place. Deliberately
+# narrow: it must express an obligation, not merely mention two offices in one
+# sentence. "Both of which support this role" is a description, not a demand.
+REQUIRE_FRAME = re.compile(
+    r'\bsplit (?:your )?time\b|\brotate (?:between|among)\b'
+    r'|\bwork (?:from |in |at )?both\b|\bacross both\b'
+    r'|\b(?:requires?|must|expected to|will need to)\b[^.]{0,60}\b(?:work\w*|be|attend\w*|present|based|located)\b'
+    r'|\ball (?:of )?(?:our|these|the) (?:offices|locations|sites)\b', re.I)
+
+
+def locations_are_alternatives(body, a, b):
+    """True if a and b are offered as a choice, False if both are required,
+    None when the posting does not say.
+
+    Judged only within sentences that name both places. Measuring between their
+    first occurrences anywhere in the text let unrelated prose decide: "Our
+    Chicago office supports engineering and design. Our Boston office supports
+    sales. You can be based in our Chicago office or our Boston office." was
+    read as a combined obligation, because an "and" about departments sat
+    between the two first mentions and outranked the sentence that actually
+    offers the choice.
+    """
+    la, lb = a.lower(), b.lower()
+    verdicts = []
+    for sentence in re.split(r'(?<=[.!?;])\s+|\n+', body or ""):
+        low = sentence.lower()
+        if la not in low or lb not in low:
+            continue
+        # Only positive evidence decides. "and" between two place names proves
+        # nothing on its own -- "our Chicago office supports engineering and our
+        # Boston office supports sales" describes departments, and reading that
+        # as an obligation rejected a perfectly good role. An unproven
+        # relationship stays unresolved, where a human settles it.
+        ia, ib = low.find(la), low.find(lb)
+        between = low[min(ia, ib): max(ia, ib)]
+        if CHOICE_FRAME.search(low) or ALTERNATIVE.search(between):
+            verdicts.append(True)
+        elif REQUIRE_FRAME.search(low):
+            verdicts.append(False)
+    if not verdicts:
+        return None
+    # Sentences that disagree are not a basis for a confident answer.
+    return verdicts[0] if len(set(verdicts)) == 1 else None
+
+
 def offered_locations(posting_location, body):
     """Places the posting actually offers as somewhere to work.
 
@@ -411,9 +471,23 @@ def assess_location(body, posting_location, profile):
                            f'profile excludes')
         if ok_here:
             if bad_here:
+                # Only a genuine choice lets the user avoid the excluded place.
+                field_listed = all(any(c in p.strip().lower() for p in
+                                       SPLIT_LOCATIONS.split(posting_location or ""))
+                                   for c in (ok_here[0], bad_here[0]))
+                rel = True if field_listed else locations_are_alternatives(
+                    body, ok_here[0], bad_here[0])
+                if rel is False:
+                    return False, (f'the role requires attending both {ok_here[0]} and '
+                                   f'{bad_here[0]}, and {bad_here[0]} is excluded; this is '
+                                   f'not a choice between them')
+                if rel is None:
+                    return None, (f'the posting names {ok_here[0]} and {bad_here[0]} without '
+                                  f'saying whether you pick one or must attend both; '
+                                  f'{bad_here[0]} is excluded, so read the posting')
                 v, why = days_verdict(ok_here[0])
-                return v, (why + f' (also requires {", ".join(bad_here)}, which you exclude '
-                                 f'-- confirm you can choose {ok_here[0]})')
+                return v, (why + f' (also offers {", ".join(bad_here)}, which you exclude '
+                                 f'-- say {ok_here[0]} on the application)')
             return days_verdict(ok_here[0])
         if not acceptable:
             return None, (f'mandatory attendance ("{phrase}") found, but the profile lists '
@@ -440,6 +514,20 @@ def assess_location(body, posting_location, profile):
                       'accepts; read the posting')
 
     # --- offered locations with no stated obligation ---------------------
+    # Same rule as above: an acceptable place alongside an excluded one is only
+    # usable if the posting says you may choose.
+    if ok_here and bad_here:
+        field_listed = all(any(c in p.strip().lower() for p in
+                               SPLIT_LOCATIONS.split(posting_location or ""))
+                           for c in (ok_here[0], bad_here[0]))
+        rel = True if field_listed else locations_are_alternatives(
+            body, ok_here[0], bad_here[0])
+        if rel is False:
+            return False, (f'the posting ties {ok_here[0]} and {bad_here[0]} together, and '
+                           f'{bad_here[0]} is excluded')
+        if rel is None:
+            return None, (f'the posting names {ok_here[0]} and {bad_here[0]} without saying '
+                          f'whether you pick one; {bad_here[0]} is excluded, so read it')
     if ok_here:
         return days_verdict(ok_here[0])
     if bad_here:

@@ -79,6 +79,41 @@ case("cities offered, attendance unstated, user has no cap", "",
 case("offered alternatives, none acceptable", "",
      "Boston, MA | Austin, TX", CHI, False)
 
+print("\nseveral mandatory places are not a choice between them")
+CHI5 = {"location": CHI["location"], "constraints": {"onsite_days_max": 5}}
+case("both offices required, one excluded",
+     "This role requires working in our Chicago office and our Boston office each week.",
+     "", CHI5, False)
+case("either office offered, one excluded",
+     "You can be based in our Chicago office or our Boston office.", "", CHI5, True)
+case("two offices named with no stated relationship",
+     "Our Chicago office. Our Boston office.", "", CHI5, None)
+case("board lists several cities, one excluded", "",
+     "Chicago, IL | Boston, MA", CHI5, True)
+# Only sentences naming both places decide the relationship; an unrelated "and"
+# elsewhere in the posting must not outrank the clause that offers the choice.
+case("an explicit choice survives unrelated prose",
+     "Our Chicago office supports engineering and design. Our Boston office supports "
+     "sales. You can be based in our Chicago office or our Boston office.", "", CHI5, True)
+case("choose between A and B is a choice, not an obligation",
+     "You may choose between our Chicago office and our Boston office.", "", CHI5, True)
+case("split your time between A and B is an obligation",
+     "You will split your time between our Chicago office and our Boston office.",
+     "", CHI5, False)
+case("work from whichever office suits you",
+     "Work from whichever office suits you: our Chicago office, our Boston office.",
+     "", CHI5, True)
+# Only an actual obligation returns False; description and incidental words do not.
+case("an incidental 'both' does not override an explicit choice",
+     "You can work in our Chicago office or our Boston office, both of which support "
+     "this role.", "", CHI5, True)
+case("a descriptive 'and' is not an obligation",
+     "Our Chicago office supports engineering and our Boston office supports sales.",
+     "", CHI5, None)
+case("contradictory sentences are unresolved",
+     "You must work from our Chicago office and our Boston office. "
+     "You can be based in our Chicago office or our Boston office.", "", CHI5, None)
+
 print("\ncountry eligibility is separate from remote")
 case("remote but country-restricted",
      "Fully remote role. Candidates must be located in Canada.", "", CHI, False)

@@ -82,6 +82,28 @@ check("tightening the office-day limit invalidates it",
       verification_gate(k7, _tighter)[0] is False)
 
 
+print("\na timestamp has to be a real time in the past")
+import math, time
+for label, ts in [("one year in the future", time.time() + 365 * 86400),
+                  ("missing", None), ("not a number", "yesterday"),
+                  ("infinite", math.inf), ("not a number at all", math.nan)]:
+    k = verification_key("greenhouse", "acme", f"ts-{abs(hash(label)) % 9999}")
+    record_verification(k, live=True, location_ok=True, requirements_read=True,
+                        apply_url_ok=True, apply_url="https://x", title_matched="PM",
+                        profile_rev=profile_fingerprint(_p))
+    _d = __import__("statepath").load("verified.json")
+    if ts is None:
+        _d[k].pop("checked_at", None)
+    else:
+        _d[k]["checked_at"] = ts
+    __import__("statepath").save("verified.json", _d)
+    try:
+        ok, why = verification_gate(k, _p)
+    except Exception as e:
+        ok, why = None, f"raised {type(e).__name__}"
+    check(f"a {label} timestamp is refused ({str(why)[:40]})", ok is False)
+
+
 print("\nlocation assessment")
 prof = {"location": {"remote_ok": True, "acceptable_metros": ["dallas"],
                      "metro_aliases": ["dfw"]}}
