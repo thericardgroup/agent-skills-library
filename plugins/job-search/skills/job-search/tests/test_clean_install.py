@@ -66,9 +66,25 @@ for rel in (".claude-plugin/marketplace.json",
     check(f"{rel} parses", ok)
 
 man = json.load(open(os.path.join(repo, ".claude-plugin", "marketplace.json")))
-src = (man["plugins"][0]["source"] or "").lstrip("./")
-check("the marketplace source path exists in the package",
-      os.path.isdir(os.path.join(repo, src)), src)
+raw_src = man["plugins"][0]["source"]
+# A source is either a relative path inside this repo, or an object naming a
+# git source with its own ref. Both are valid; they are checked differently.
+if isinstance(raw_src, str):
+    src = raw_src.lstrip("./")
+    check("the marketplace source path exists in the package",
+          os.path.isdir(os.path.join(repo, src)), src)
+else:
+    src = (raw_src.get("path") or "").lstrip("./")
+    check("the pinned source names a path that exists in the package",
+          bool(src) and os.path.isdir(os.path.join(repo, src)), src)
+    check("the release is pinned to a tag rather than a branch",
+          raw_src.get("ref") not in (None, "", "main", "master", "HEAD"),
+          str(raw_src.get("ref")))
+    check("the pinned tag exists in this repository",
+          subprocess.run(["git", "rev-parse", "--verify", "--quiet",
+                          f"{raw_src['ref']}^{{commit}}"],
+                         cwd=REPO_SRC, capture_output=True).returncode == 0,
+          str(raw_src.get("ref")))
 check("SKILL.md is where a plugin loader expects it",
       os.path.isfile(os.path.join(SKILL, "SKILL.md")))
 

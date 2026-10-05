@@ -76,6 +76,7 @@ python3 tests/test_location.py              location constraints compose
 python3 tests/test_entry_paths.py           both ways in reach the same pipeline
 python3 tests/test_coverage.py              an empty result says what it is about
 python3 tests/test_clean_install.py         installs and runs outside the source tree
+python3 tests/test_frontmatter.py           the skill's own metadata must parse
 python3 scripts/validate_profile.py --file examples/profile.example.json
 ```
 
