@@ -1,0 +1,150 @@
+{
+  "identity": {
+    "name": "Dana Okonkwo",
+    "email": "dana@example.com",
+    "phone": "(312) 555-0147",
+    "location": "Chicago, IL",
+    "links": [
+      {
+        "text": "linkedin.com/in/example",
+        "url": "https://linkedin.com/in/example"
+      }
+    ]
+  },
+  "titles": {
+    "target": [
+      "ux research",
+      "user research",
+      "design research"
+    ],
+    "exclude": [
+      "intern",
+      "engineer",
+      "recruiter",
+      "early career",
+      "new grad"
+    ],
+    "source": "stated"
+  },
+  "location": {
+    "remote_ok": false,
+    "country": "united states",
+    "acceptable_metros": [
+      "chicago",
+      "evanston"
+    ],
+    "metro_aliases": [
+      "chicagoland"
+    ],
+    "reject_metros": [
+      "new york",
+      "san francisco",
+      "austin"
+    ]
+  },
+  "pay": {
+    "floor": 95000,
+    "target": 130000
+  },
+  "seniority": {
+    "at_level": [
+      "\\bsenior\\b",
+      "\\bsr\\.?\\b"
+    ],
+    "above_level": [
+      "director",
+      "head of",
+      "\\bvp\\b"
+    ],
+    "below_level": [
+      "associate",
+      "junior",
+      "early career",
+      "entry.level",
+      "new grad",
+      "intern"
+    ]
+  },
+  "interests": [
+    {
+      "name": "healthcare",
+      "patterns": [
+        "patient",
+        "clinical",
+        "health system"
+      ],
+      "title_weight": 30,
+      "body_weight": 12
+    },
+    {
+      "name": "qualitative methods",
+      "patterns": [
+        "ethnograph",
+        "diary study",
+        "usability"
+      ],
+      "title_weight": 20,
+      "body_weight": 10
+    }
+  ],
+  "gaps": [
+    {
+      "name": "quant/statistics depth",
+      "patterns": [
+        "regression analysis",
+        "\\bR\\b programming"
+      ],
+      "penalty": 12
+    },
+    {
+      "name": "security clearance",
+      "patterns": [
+        "security clearance",
+        "TS/SCI"
+      ],
+      "hard": true
+    }
+  ],
+  "resume": {
+    "required_sections": [
+      "EDUCATION",
+      "EXPERIENCE"
+    ],
+    "never_drop_employers": [],
+    "min_chars": 500,
+    "experience": [
+      {
+        "title": "Senior UX Researcher",
+        "employer": "Lakeshore Health",
+        "dates": "2021 - present",
+        "scope": "Patient-facing research across three product lines",
+        "bullets": [
+          "Ran 40+ usability sessions; task failure fell from 31% to 9%, measured on the same protocol.",
+          "Built the research repository the design org now plans sprints against."
+        ]
+      },
+      {
+        "title": "UX Researcher",
+        "employer": "Civic Data Co",
+        "dates": "2018 - 2021",
+        "bullets": [
+          "Led diary studies with 60 participants across four cities."
+        ]
+      }
+    ],
+    "earlier_experience": [
+      "Research Coordinator, Midwest Health Partners (2016 - 2018)"
+    ],
+    "education": [
+      "MS Human-Computer Interaction, example university"
+    ]
+  },
+  "max_posting_age_days": 60,
+  "constraints": {
+    "travel_ceiling_pct": 15,
+    "will_relocate": false,
+    "onsite_days_max": 2,
+    "visa_sponsorship_needed": false,
+    "notes": ""
+  }
+}

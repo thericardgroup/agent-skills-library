@@ -1,0 +1,27 @@
+{
+  "name": "agent-skills-library",
+  "owner": {
+    "name": "The Ricard Group",
+    "url": "https://github.com/thericardgroup"
+  },
+  "metadata": {
+    "description": "Free Claude Code skills from The Ricard Group.",
+    "version": "0.1.0"
+  },
+  "plugins": [
+    {
+      "name": "job-search",
+      "source": "./plugins/job-search",
+      "description": "Rigorous end-to-end job search for Claude Code: build a profile by interview, enumerate applicant-tracking boards directly, score against stated requirements, verify every role is still live before investing in it, and generate tailored resumes, cover letters and fit summaries.",
+      "category": "productivity",
+      "keywords": [
+        "job search",
+        "resume",
+        "cover letter",
+        "ats",
+        "career",
+        "hiring"
+      ]
+    }
+  ]
+}

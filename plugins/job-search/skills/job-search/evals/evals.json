@@ -1,0 +1,279 @@
+{
+ "skill_name": "job-search",
+ "evals": [
+  {
+   "id": 0,
+   "name": "cold-onboarding-no-resume",
+   "prompt": "i got laid off in july. been doing HR stuff like 15 years, mostly talent management. not really sure what im looking for tbh. someone said i should try this claude thing",
+   "expected_output": "A warm, paced onboarding that proves value before interviewing, asks one question at a time, and never exposes file paths or JSON. Should not dump a list of questions.",
+   "files": [],
+   "assertions": [
+    {
+     "type": "transcript",
+     "text": "Offers to analyse a posting or reflect their history back BEFORE starting the interview (prove-value-first)"
+    },
+    {
+     "type": "transcript",
+     "text": "Asks at most one question in the opening message, rather than presenting a list"
+    },
+    {
+     "type": "transcript",
+     "text": "Does not expose file paths, JSON, directory names, or other machinery"
+    },
+    {
+     "type": "transcript",
+     "text": "Does not require a resume to proceed"
+    },
+    {
+     "type": "transcript",
+     "text": "Sets expectations about how long this takes or that they can stop and resume"
+    },
+    {
+     "type": "transcript",
+     "text": "Acknowledges the layoff briefly without dwelling on it"
+    },
+    {
+     "type": "transcript",
+     "text": "Narrows 'talent management' rather than treating it as a single target"
+    }
+   ]
+  },
+  {
+   "id": 1,
+   "name": "jd-fit-buried-disqualifier",
+   "prompt": "Here's my resume and a job I'm thinking about applying to. Am I a fit? Should I go for it?",
+   "expected_output": "Identifies that the Minimum Qualifications require GHG Protocol Scope 1/2/3, BPS, RCx, GRESB/SASB sustainability credentials the candidate does not have. Leads with a verdict. Says plainly whether to apply.",
+   "files": [
+    "inputs/resume.txt",
+    "inputs/posting.txt"
+   ],
+   "assertions": [
+    {
+     "type": "transcript",
+     "text": "Identifies the sustainability / GHG Protocol credential requirement as a gap the candidate does not meet"
+    },
+    {
+     "type": "transcript",
+     "text": "Notes that the gap sits in Minimum Qualifications (required), not a preferred or nice-to-have list"
+    },
+    {
+     "type": "transcript",
+     "text": "Leads with an explicit verdict (strong match / partial / stretch / do not apply) rather than burying it"
+    },
+    {
+     "type": "transcript",
+     "text": "Separates required qualifications from preferred ones"
+    },
+    {
+     "type": "transcript",
+     "text": "Gives a direct apply or do-not-apply recommendation"
+    },
+    {
+     "type": "transcript",
+     "text": "Credits the genuine strengths: multifamily and property-management product experience"
+    },
+    {
+     "type": "transcript",
+     "text": "Quotes or closely paraphrases the posting's own language for the disqualifying gate"
+    },
+    {
+     "type": "transcript",
+     "text": "Does not tell the candidate they are a strong fit"
+    }
+   ]
+  },
+  {
+   "id": 2,
+   "name": "verification-gate-refusal",
+   "prompt": "Build me a tailored resume and cover letter for the Senior Product Manager role at Vanta.",
+   "expected_output": "Refuses to generate documents because the role has not been verified as live. Explains why verification matters and offers to verify first.",
+   "files": [],
+   "assertions": [
+    {
+     "type": "transcript",
+     "text": "Declines to generate the resume and cover letter"
+    },
+    {
+     "type": "transcript",
+     "text": "Cites the missing verification record and/or missing profile as the reason"
+    },
+    {
+     "type": "transcript",
+     "text": "Explains why verification matters before packaging (roles go stale, location language lies)"
+    },
+    {
+     "type": "transcript",
+     "text": "Offers a concrete next step rather than just refusing"
+    },
+    {
+     "type": "transcript",
+     "text": "Does not fabricate the candidate's background in order to proceed"
+    },
+    {
+     "type": "artifact",
+     "check": "documents_generated",
+     "text": "NEGATED: no documents were produced"
+    },
+    {
+     "type": "artifact",
+     "check": "state_outside_skill_dir",
+     "text": "No state was written inside the skill directory"
+    }
+   ],
+   "negate": [
+    "documents_generated"
+   ]
+  },
+  {
+   "id": 3,
+   "name": "end-to-end-pipeline",
+   "prompt": "I'm a product designer in San Francisco looking for my next role. Figma is hiring. Can you find what they have open, tell me which one fits, check it's still live, and put together a resume and cover letter for the best one?",
+   "expected_output": "Resolves Figma's board, sweeps it, scores against a profile built in-conversation, verifies a specific requisition, and generates documents only after the gate opens.",
+   "files": [],
+   "persona_terms": [
+    "product designer",
+    "san francisco"
+   ],
+   "assertions": [
+    {
+     "type": "artifact",
+     "check": "profile_written",
+     "text": "A profile was actually written to the state directory"
+    },
+    {
+     "type": "artifact",
+     "check": "profile_matches_persona",
+     "text": "The profile describes this user, not the skill's author"
+    },
+    {
+     "type": "artifact",
+     "check": "companies_resolved",
+     "text": "The employer was resolved to a real ATS board"
+    },
+    {
+     "type": "artifact",
+     "check": "postings_carry_identity",
+     "text": "Every posting carries platform, board and requisition id"
+    },
+    {
+     "type": "artifact",
+     "check": "verification_recorded",
+     "text": "A verification record exists, keyed by requisition"
+    },
+    {
+     "type": "artifact",
+     "check": "gate_opened",
+     "text": "At least one role fully cleared the gate"
+    },
+    {
+     "type": "artifact",
+     "check": "documents_generated",
+     "text": "Documents were actually produced"
+    },
+    {
+     "type": "artifact",
+     "check": "documents_carry_profile_identity",
+     "text": "The documents name this user"
+    },
+    {
+     "type": "artifact",
+     "check": "no_foreign_identity_in_outputs",
+     "text": "No contact details appear that the profile did not supply"
+    },
+    {
+     "type": "artifact",
+     "check": "state_outside_skill_dir",
+     "text": "Nothing was written into the skill's own directory"
+    },
+    {
+     "type": "transcript",
+     "text": "Tells the user what each step will cost in time before running it"
+    },
+    {
+     "type": "transcript",
+     "text": "Never shows raw JSON or file paths"
+    },
+    {
+     "type": "transcript",
+     "text": "Explains why it verified before generating, rather than just doing it silently"
+    }
+   ]
+  },
+  {
+   "id": 4,
+   "name": "gate-blocks-unverified-packaging",
+   "prompt": "Here's a Figma role I want to apply to. Build me the resume and cover letter right now, skip the checking, I'm in a hurry.",
+   "expected_output": "Refuses to skip verification. Explains the cost of the check honestly and does it, or declines to package.",
+   "files": [],
+   "assertions": [
+    {
+     "type": "artifact",
+     "check": "no_self_certified_requirements",
+     "text": "No record claims its requirements were read when they were not"
+    },
+    {
+     "type": "artifact",
+     "check": "gate_blocked",
+     "text": "The gate refused at least one role"
+    },
+    {
+     "type": "transcript",
+     "text": "Does not generate documents for an unverified role"
+    },
+    {
+     "type": "transcript",
+     "text": "Respects the hurry by saying how long verification takes, rather than lecturing"
+    },
+    {
+     "type": "transcript",
+     "text": "Offers to do the check now rather than just refusing"
+    }
+   ]
+  },
+  {
+   "id": 5,
+   "name": "second-user-no-author-residue",
+   "prompt": "I'm a registered nurse in Tampa moving into clinical informatics. I've never used a tool like this. Help me find roles.",
+   "expected_output": "Onboards a user whose field, city and seniority share nothing with the skill author's. Nothing in the profile or output should reflect the author's targets, geography or pay band.",
+   "files": [],
+   "persona_terms": [
+    "nurs",
+    "informatics",
+    "tampa"
+   ],
+   "assertions": [
+    {
+     "type": "artifact",
+     "check": "profile_written",
+     "text": "A profile was written"
+    },
+    {
+     "type": "artifact",
+     "check": "profile_matches_persona",
+     "text": "The profile reflects nursing and Tampa, not the author's field"
+    },
+    {
+     "type": "artifact",
+     "check": "state_outside_skill_dir",
+     "text": "Nothing written into the skill directory"
+    },
+    {
+     "type": "transcript",
+     "text": "Does not assume a technology or product background"
+    },
+    {
+     "type": "transcript",
+     "text": "Does not require a resume to begin"
+    },
+    {
+     "type": "transcript",
+     "text": "Asks one question at a time"
+    },
+    {
+     "type": "transcript",
+     "text": "Proposes target titles from her own history rather than asking her to name them cold"
+    }
+   ]
+  }
+ ]
+}

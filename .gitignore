@@ -1,0 +1,4 @@
+.handoffs/
+node_modules/
+state/
+.claude/

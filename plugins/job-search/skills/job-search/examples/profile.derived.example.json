@@ -1,0 +1,139 @@
+{
+  "identity": {
+    "name": "Renee Whitfield",
+    "email": "renee@example.com",
+    "phone": "(312) 555-0182",
+    "location": "Grand Rapids, MI"
+  },
+  "titles": {
+    "target": [
+      "talent management",
+      "learning and development",
+      "organizational development",
+      "people development"
+    ],
+    "exclude": [
+      "intern",
+      "recruiter",
+      "payroll"
+    ],
+    "source": "derived",
+    "derived_from": [
+      {
+        "family": "Talent management",
+        "evidence": "Fifteen years owning succession planning and performance cycles for a 2,200-person employer"
+      },
+      {
+        "family": "Learning and development",
+        "evidence": "Built the leadership programme the company still runs; this is the part she described without being asked"
+      },
+      {
+        "family": "Organizational development",
+        "evidence": "Led the people side of a plant consolidation, which is OD work under another name"
+      }
+    ]
+  },
+  "location": {
+    "remote_ok": true,
+    "country": "united states",
+    "acceptable_metros": [
+      "grand rapids",
+      "michigan"
+    ],
+    "metro_aliases": [],
+    "reject_metros": []
+  },
+  "pay": {
+    "floor": 115000,
+    "target": 142000
+  },
+  "seniority": {
+    "at_level": [
+      "\\bsenior\\b",
+      "\\bsr\\.?\\b"
+    ],
+    "above_level": [
+      "director",
+      "head of",
+      "\\bvp\\b"
+    ],
+    "below_level": [
+      "associate",
+      "junior",
+      "early career",
+      "entry.level",
+      "new grad",
+      "intern"
+    ]
+  },
+  "interests": [
+    {
+      "name": "leadership development",
+      "patterns": [
+        "leadership development",
+        "succession",
+        "high potential"
+      ],
+      "title_weight": 28,
+      "body_weight": 12
+    }
+  ],
+  "gaps": [
+    {
+      "name": "HRIS implementation",
+      "patterns": [
+        "workday implementation",
+        "hris implementation"
+      ],
+      "penalty": 10
+    },
+    {
+      "name": "SPHR or SHRM-SCP",
+      "patterns": [
+        "SPHR",
+        "SHRM-SCP"
+      ],
+      "hard": false,
+      "penalty": 6
+    }
+  ],
+  "resume": {
+    "required_sections": [
+      "EXPERIENCE",
+      "EDUCATION"
+    ],
+    "min_chars": 500,
+    "never_drop_employers": [],
+    "experience": [
+      {
+        "title": "Director of Talent Management",
+        "employer": "Example Manufacturing",
+        "dates": "2014 - 2026",
+        "bullets": [
+          "Ran succession planning across 14 sites and 2,200 employees.",
+          "Built the leadership programme; 40 of 52 graduates were still there three years on."
+        ]
+      },
+      {
+        "title": "Staffing Consultant",
+        "employer": "Example Staffing Group",
+        "dates": "2011 - 2014",
+        "bullets": [
+          "Placed 90 roles a year across light industrial clients."
+        ]
+      }
+    ],
+    "earlier_experience": [],
+    "education": [
+      "BA Organizational Psychology, example university"
+    ]
+  },
+  "max_posting_age_days": 60,
+  "constraints": {
+    "travel_ceiling_pct": 15,
+    "will_relocate": false,
+    "onsite_days_max": 2,
+    "visa_sponsorship_needed": false,
+    "notes": ""
+  }
+}
