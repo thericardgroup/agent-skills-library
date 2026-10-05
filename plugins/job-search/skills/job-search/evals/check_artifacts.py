@@ -294,6 +294,7 @@ def _(ctx):
         ("apply link resolves", appr.get("apply_url_ok") is True),
         ("requirements read", appr.get("requirements_read") is True),
         ("bound to a profile", bool(appr.get("profile_rev"))),
+        ("bound to a candidate", bool(appr.get("candidate"))),
     ) if not ok]
     if failures:
         return False, f"the approval this package names fails: {', '.join(failures)}"

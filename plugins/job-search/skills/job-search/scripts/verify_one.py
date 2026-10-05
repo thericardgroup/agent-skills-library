@@ -20,7 +20,7 @@ import argparse, hashlib, json, re, sys, os, urllib.request, urllib.error, html
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from checks import (record_verification, record_attempt_failed, verification_key,
-                    profile_fingerprint, Timer)
+                    profile_fingerprint, candidate_id, Timer)
 from statepath import load
 
 UA = {"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)"}
@@ -641,6 +641,7 @@ def main(argv=None):
             requirements_read=reviewed, apply_url=post["apply_url"],
             title_matched=post["title"], body_fingerprint=fingerprint,
             profile_rev=profile_fingerprint(profile) if profile else None,
+            candidate=candidate_id(profile) if profile else None,
             company=post.get("company", ""),
             notes=f"location: {loc_evidence}; {url_evidence}")
 

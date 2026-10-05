@@ -15,7 +15,7 @@ import json, os, subprocess, sys, tempfile, time
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "scripts"))
-from checks import profile_fingerprint
+from checks import profile_fingerprint, candidate_id
 
 KEY = "greenhouse::acme::4056789"
 PROFILE = {
@@ -75,6 +75,7 @@ def run_case(label, record, expect_refusal):
             rec.pop("profile_rev", None)
         else:
             rec.setdefault("profile_rev", profile_fingerprint(PROFILE))
+            rec.setdefault("candidate", candidate_id(PROFILE))
         rec["checked_at"] = time.time() - age * 86400
         with open(os.path.join(state, "verified.json"), "w") as fh:
             json.dump({KEY: rec}, fh)
@@ -134,7 +135,8 @@ for label, mutate in [
                          requirements_read=True, checked_at=time.time(),
                          apply_url="https://example.com/apply",
                          title_matched="Product Manager", company="Example Co",
-                         profile_rev=profile_fingerprint(PROFILE))},
+                         profile_rev=profile_fingerprint(PROFILE),
+                         candidate=candidate_id(PROFILE))},
               open(os.path.join(state, "verified.json"), "w"))
     cfg_path = os.path.join(state, "cfg.json")
     json.dump(cfg_bad, open(cfg_path, "w"))
@@ -155,7 +157,8 @@ json.dump({KEY: dict(status="verified", live=True, location_ok=True, apply_url_o
                      apply_url="https://example.com/apply",
                      title_matched="Product Manager", company="Example Co",
                      body_fingerprint="abc123",
-                     profile_rev=profile_fingerprint(PROFILE))},
+                     profile_rev=profile_fingerprint(PROFILE),
+                     candidate=candidate_id(PROFILE))},
           open(os.path.join(state, "verified.json"), "w"))
 cfg_path = os.path.join(state, "cfg.json"); json.dump(CFG, open(cfg_path, "w"))
 subprocess.run(["node", os.path.join(ROOT, "scripts", "docgen", "package.js"), cfg_path, outdir],

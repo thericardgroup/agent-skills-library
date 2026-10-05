@@ -115,8 +115,10 @@ async function buildPackage({ key, outDir, resume, letter, fit, profile }) {
         requirements_read: rec.requirements_read === true,
         body_fingerprint: rec.body_fingerprint || null,
         profile_rev: rec.profile_rev || null,
+        candidate: rec.candidate || null,
       },
       profile_rev: rec.profile_rev || null,
+      candidate: rec.candidate || null,
       preexisting_files: preexisting,
     };
 

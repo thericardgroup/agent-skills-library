@@ -70,9 +70,10 @@ from checks import profile_fingerprint
 _p = {"location": {"remote_ok": True, "acceptable_metros": ["chicago"]},
       "constraints": {"onsite_days_max": 2}}
 k7 = verification_key("greenhouse", "acme", "777")
+from checks import candidate_id as _cid
 record_verification(k7, live=True, location_ok=True, requirements_read=True,
                     apply_url_ok=True, apply_url="https://x", title_matched="PM",
-                    profile_rev=profile_fingerprint(_p))
+                    profile_rev=profile_fingerprint(_p), candidate=_cid(_p))
 check("unchanged profile keeps the approval", verification_gate(k7, _p)[0] is True)
 _changed = {**_p, "location": {**_p["location"], "remote_ok": False}}
 check("refusing remote afterwards invalidates it",
@@ -90,7 +91,7 @@ for label, ts in [("one year in the future", time.time() + 365 * 86400),
     k = verification_key("greenhouse", "acme", f"ts-{abs(hash(label)) % 9999}")
     record_verification(k, live=True, location_ok=True, requirements_read=True,
                         apply_url_ok=True, apply_url="https://x", title_matched="PM",
-                        profile_rev=profile_fingerprint(_p))
+                        profile_rev=profile_fingerprint(_p), candidate=_cid(_p))
     _d = __import__("statepath").load("verified.json")
     if ts is None:
         _d[k].pop("checked_at", None)

@@ -5,14 +5,21 @@ const crypto = require('crypto');
 const { execFileSync } = require('child_process');
 const path = require('path');
 
-function profileFingerprint(profile) {
-  const script = path.join(__dirname, '..', 'checks.py');
+function ask(fn, profile) {
+  const scripts = path.join(__dirname, '..');
   const out = execFileSync('python3', ['-c',
-    `import sys,json; sys.path.insert(0, ${JSON.stringify(path.dirname(script))}); ` +
-    'from checks import profile_fingerprint; ' +
-    'print(profile_fingerprint(json.load(sys.stdin)))'],
+    `import sys,json; sys.path.insert(0, ${JSON.stringify(scripts)}); ` +
+    `from checks import ${fn}; print(${fn}(json.load(sys.stdin)))`],
     { input: JSON.stringify(profile), encoding: 'utf8' });
   return out.trim();
 }
 
-module.exports = { profileFingerprint };
+const profileFingerprint = (profile) => ask('profile_fingerprint', profile);
+
+// Who the profile belongs to. Needed separately because the assessment
+// revision deliberately excludes identity -- two people with the same
+// constraints share a revision, and without this the second one could
+// generate documents under the first one's approval.
+const candidateId = (profile) => ask('candidate_id', profile);
+
+module.exports = { profileFingerprint, candidateId };

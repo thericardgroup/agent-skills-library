@@ -41,16 +41,10 @@ async function writeLetter(cfg, outPath, profile, opts) {
   return { path: outPath, bytes: buf.length };
 }
 
+// No CLI here on purpose. A document written through a standalone entry point
+// carries no requisition identity, no approval evidence and no digest, so it
+// cannot be audited afterwards -- and an unauditable deliverable is exactly
+// what the manifest exists to prevent. scripts/docgen/package.js is the only
+// supported way to produce one; these functions are its internals.
 module.exports = { letter, writeLetter };
 
-if (require.main === module) {
-  const [cfgPath, outPath, key] = process.argv.slice(2);
-  if (!cfgPath || !outPath || !key) {
-    console.error('usage: node letter.js <letter-config.json> <output.docx> <requisition-key>\n' +
-      '  config: { "date", "title", "company", "letter": ["para", ...] }');
-    process.exit(2);
-  }
-  writeLetter(JSON.parse(fs.readFileSync(cfgPath, 'utf8')), outPath, null, { key })
-    .then((res) => console.log(`   wrote ${res.path} (${res.bytes} bytes)`))
-    .catch((e) => { console.error(e.message); process.exit(1); });
-}

@@ -93,15 +93,10 @@ async function writeFit(cfg, outPath, profile, opts) {
   return { path: outPath, bytes: Buffer.byteLength(text) };
 }
 
+// No CLI here on purpose. A document written through a standalone entry point
+// carries no requisition identity, no approval evidence and no digest, so it
+// cannot be audited afterwards -- and an unauditable deliverable is exactly
+// what the manifest exists to prevent. scripts/docgen/package.js is the only
+// supported way to produce one; these functions are its internals.
 module.exports = { fitSummary, writeFit };
 
-if (require.main === module) {
-  const [cfgPath, outPath, key] = process.argv.slice(2);
-  if (!cfgPath || !outPath || !key) {
-    console.error('usage: node fit.js <fit-config.json> <output.md> <requisition-key>');
-    process.exit(2);
-  }
-  writeFit(JSON.parse(fs.readFileSync(cfgPath, 'utf8')), outPath, null, { key })
-    .then((res) => console.log(`   wrote ${res.path} (${res.bytes} bytes)`))
-    .catch((e) => { console.error(e.message); process.exit(1); });
-}

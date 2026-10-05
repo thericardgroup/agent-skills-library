@@ -113,20 +113,48 @@ class Timer:
 # never by title. Two postings on one board can share a title; certifying the
 # first match under the caller's chosen name is how the wrong role gets packaged.
 
-def profile_fingerprint(profile):
-    """A hash of the parts of the profile a verification actually depends on.
+def _digest(obj):
+    return hashlib.sha256(
+        json.dumps(obj, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    ).hexdigest()[:16]
 
-    An approval says "this posting suits this user". Change what the user will
-    accept and the approval no longer means that, so it has to be reassessed --
-    verifying a remote role and then deciding you will not work remotely must
-    not leave the gate open.
+
+def candidate_id(profile):
+    """Who the approval is about.
+
+    Kept separate from the assessment revision because the two answer different
+    questions. Hashing only location and constraints meant two different people
+    in the same city produced the same value, and one person's approval
+    authorized the other's documents -- a binding that did not bind.
     """
+    ident = (profile or {}).get("identity") or {}
+    return _digest({"name": (ident.get("name") or "").strip().lower(),
+                    "email": (ident.get("email") or "").strip().lower()})
+
+
+def profile_fingerprint(profile):
+    """What was assessed when the approval was given.
+
+    Everything a fit decision actually rests on: where they can work, what they
+    will accept, what they need to earn, what they cannot do, and what they are
+    looking for. Change any of those and the approval no longer means what it
+    said, so it has to be reassessed.
+
+    Deliberately excludes presentation -- a corrected surname or a reworded
+    resume bullet does not change whether a posting suits someone, and
+    invalidating approvals over formatting would train people to ignore the
+    warning.
+    """
+    p = profile or {}
     relevant = {
-        "location": (profile or {}).get("location") or {},
-        "constraints": (profile or {}).get("constraints") or {},
+        "location": p.get("location") or {},
+        "constraints": p.get("constraints") or {},
+        "pay": p.get("pay") or {},
+        "gaps": p.get("gaps") or [],
+        "titles": {k: v for k, v in (p.get("titles") or {}).items()
+                   if k in ("target", "exclude")},
     }
-    blob = json.dumps(relevant, sort_keys=True, separators=(",", ":"))
-    return hashlib.sha256(blob.encode("utf-8")).hexdigest()[:16]
+    return _digest(relevant)
 
 
 def verification_key(platform, board, requisition_id):
@@ -140,7 +168,7 @@ def verification_key(platform, board, requisition_id):
 
 def record_verification(key, *, live, location_ok, requirements_read, apply_url,
                         title_matched, apply_url_ok=False, body_fingerprint=None,
-                        profile_rev=None, company=None, notes=""):
+                        profile_rev=None, candidate=None, company=None, notes=""):
     """A successful check. Every field must be something the caller actually
     established -- there are no defaults here on purpose.
 
@@ -155,6 +183,7 @@ def record_verification(key, *, live, location_ok, requirements_read, apply_url,
                   title_matched=title_matched,
                   body_fingerprint=body_fingerprint or prior.get("body_fingerprint"),
                   profile_rev=profile_rev or prior.get("profile_rev"),
+                  candidate=candidate or prior.get("candidate"),
                   company=company or prior.get("company", ""),
                   notes=notes)
     save("verified.json", d)
@@ -222,10 +251,12 @@ def verification_gate(key, profile=None):
         # binding existed is not evidence that this profile was assessed, and
         # treating absence as compatibility is how a stale approval survives an
         # incompatible edit.
-        if not d.get("profile_rev"):
-            return False, ("this approval carries no profile revision, so there is no "
-                           "evidence it was assessed against the current profile. "
-                           "Re-verify.")
+        if not d.get("profile_rev") or not d.get("candidate"):
+            return False, ("this approval carries no candidate binding, so there is no "
+                           "evidence of who it was assessed for. Re-verify.")
+        if candidate_id(profile) != d["candidate"]:
+            return False, ("this approval was given for a different candidate. An approval "
+                           "is evidence about one posting and one person. Re-verify.")
         if profile_fingerprint(profile) != d["profile_rev"]:
             return False, ("the profile's location or constraints changed after this role "
                            "was verified, so the approval no longer describes this user. "

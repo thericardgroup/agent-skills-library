@@ -15,7 +15,7 @@
         "source": "git-subdir",
         "url": "https://github.com/thericardgroup/agent-skills-library.git",
         "path": "plugins/job-search",
-        "ref": "job-search--v0.1.0"
+        "ref": "job-search--v0.1.1"
       },
       "description": "Rigorous end-to-end job search for Claude Code: build a profile by interview, enumerate applicant-tracking boards directly, score against stated requirements, verify every role is still live before investing in it, and generate tailored resumes, cover letters and fit summaries.",
       "category": "productivity",

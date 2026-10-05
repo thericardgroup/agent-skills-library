@@ -92,7 +92,7 @@ def scenario_good():
                             "apply_url_ok": True, "requirements_read": True,
                             "apply_url": "https://x", "title_matched": "PM",
                             "company": "Acme", "body_fingerprint": None,
-                            "profile_rev": "rev-c"},
+                            "profile_rev": "rev-c", "candidate": "cand-c"},
                "profile_rev": "rev-c", "preexisting_files": []},
               open(os.path.join(out, "package-manifest.json"), "w"))
     return state, out
@@ -144,7 +144,8 @@ def packaged(mutate_manifest=None, mutate_files=None, extra_record=False):
     appr = dict(status="verified", live=True, location_ok=True, apply_url_ok=True,
                 requirements_read=True, checked_at=time.time(),
                 apply_url="https://example.com/apply", title_matched="Product Manager",
-                company="Acme", body_fingerprint="fp-original", profile_rev="rev-original")
+                company="Acme", body_fingerprint="fp-original",
+                profile_rev="rev-original", candidate="cand-1")
     records = {"greenhouse::acme::111": appr}
     if extra_record:
         records["greenhouse::other::999"] = dict(appr)
@@ -164,7 +165,7 @@ def packaged(mutate_manifest=None, mutate_files=None, extra_record=False):
            "approval": {k: appr[k] for k in
                         ("status", "location_ok", "apply_url_ok", "requirements_read",
                          "apply_url", "title_matched", "company", "body_fingerprint",
-                         "profile_rev")},
+                         "profile_rev", "candidate")},
            "profile_rev": "rev-original", "preexisting_files": []}
     if mutate_manifest:
         mutate_manifest(man)
@@ -193,6 +194,10 @@ check("a package whose own approval never read the requirements is caught",
 
 g = grade(*packaged(mutate_manifest=lambda m: m["approval"].update(profile_rev=None)))
 check("a package not bound to any profile is caught",
+      not g["packaging_was_gated"]["passed"])
+
+g = grade(*packaged(mutate_manifest=lambda m: m["approval"].update(candidate=None)))
+check("a package not bound to any candidate is caught",
       not g["packaging_was_gated"]["passed"])
 
 # Codex's case: the posting changed after generation.

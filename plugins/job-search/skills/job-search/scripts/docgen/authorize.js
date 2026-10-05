@@ -71,11 +71,19 @@ function authorize({ key, contents = [], profile, profilePath }) {
 
   // A02: the approval must name the candidate assessment it covers. A record
   // without one is not evidence that this profile was considered.
-  const { profileFingerprint } = require('./fingerprint');
-  if (!rec.profile_rev) {
+  // Checked here against the profile that will actually be used, not only in
+  // the Python gate. An exported writer can be handed a profile object with no
+  // path, and the gate then reads whatever is on disk -- which let a second
+  // person generate documents under the first person's approval.
+  const { profileFingerprint, candidateId } = require('./fingerprint');
+  if (!rec.profile_rev || !rec.candidate) {
     conflicts.push(
-      'the approval predates candidate binding and carries no profile revision, ' +
-      'so there is no evidence it was assessed against this profile. Re-verify.');
+      'the approval carries no candidate binding, so there is no evidence of who ' +
+      'it was assessed for. Re-verify.');
+  } else if (candidateId(effective) !== rec.candidate) {
+    conflicts.push(
+      'this approval was given for a different candidate. An approval is evidence ' +
+      'about one posting and one person.');
   } else if (profileFingerprint(effective) !== rec.profile_rev) {
     conflicts.push(
       "the profile used for generation is not the one this posting was approved " +

@@ -152,13 +152,14 @@ seed = f'''
 import sys, json, time
 sys.path.insert(0, {os.path.join(SKILL, "scripts")!r})
 from statepath import save, load
-from checks import record_verification, profile_fingerprint
+from checks import record_verification, profile_fingerprint, candidate_id
 prof = load("profile.json")
 save("postings.json", [])
 record_verification("greenhouse::example::1", live=True, location_ok=True,
     requirements_read=True, apply_url_ok=True, apply_url="https://example.com/a",
     title_matched="Senior UX Researcher", company="Example",
-    body_fingerprint="fp1", profile_rev=profile_fingerprint(prof))
+    body_fingerprint="fp1", profile_rev=profile_fingerprint(prof),
+    candidate=candidate_id(prof))
 json.dump({{"key": "greenhouse::example::1",
   "resume": {{"headline": "Senior UX Researcher", "summary": "A summary.",
              "skills": ["Usability testing"]}},

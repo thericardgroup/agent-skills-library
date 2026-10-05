@@ -116,17 +116,10 @@ async function writeResume(cfg, outPath, profile, opts) {
   return { path: outPath, bytes: buf.length };
 }
 
+// No CLI here on purpose. A document written through a standalone entry point
+// carries no requisition identity, no approval evidence and no digest, so it
+// cannot be audited afterwards -- and an unauditable deliverable is exactly
+// what the manifest exists to prevent. scripts/docgen/package.js is the only
+// supported way to produce one; these functions are its internals.
 module.exports = { resume, writeResume };
 
-if (require.main === module) {
-  const [cfgPath, outPath, key] = process.argv.slice(2);
-  if (!cfgPath || !outPath || !key) {
-    console.error('usage: node resume.js <resume-config.json> <output.docx> <requisition-key>\n' +
-      '  config: { "headline", "summary", "skills": [...] }  -- per-role tailoring only;\n' +
-      '  employment history comes from profile.resume.experience and is not editable here.');
-    process.exit(2);
-  }
-  writeResume(JSON.parse(fs.readFileSync(cfgPath, 'utf8')), outPath, null, { key })
-    .then((res) => console.log(`   wrote ${res.path} (${res.bytes} bytes)`))
-    .catch((e) => { console.error(e.message); process.exit(1); });
-}
