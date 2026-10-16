@@ -1,13 +1,12 @@
 // Node's view of the profile revision. Must stay identical to
 // checks.profile_fingerprint, which is why it hashes the same canonical JSON
 // rather than reimplementing a judgement about which fields matter.
-const crypto = require('crypto');
-const { execFileSync } = require('child_process');
+const { runPython } = require('./python');
 const path = require('path');
 
 function ask(fn, profile) {
   const scripts = path.join(__dirname, '..');
-  const out = execFileSync('python3', ['-c',
+  const out = runPython(['-c',
     `import sys,json; sys.path.insert(0, ${JSON.stringify(scripts)}); ` +
     `from checks import ${fn}; print(${fn}(json.load(sys.stdin)))`],
     { input: JSON.stringify(profile), encoding: 'utf8' });

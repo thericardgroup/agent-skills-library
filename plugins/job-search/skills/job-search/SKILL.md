@@ -16,8 +16,9 @@ scoring sophistication substitutes for it.
 
 ## Before anything else
 
-Run `scripts/preflight.py`. It creates the state directory, installs the document libraries, and
-reports what is missing. **Do not make the user do setup.** If something cannot be fixed
+Run `scripts/preflight.py`. It creates the state directory, installs the document libraries,
+reports what is missing, and tells you the exact Python interpreter to use for everything
+after it. On Windows try `py -3 scripts/preflight.py`; elsewhere `python3` is usually right. **Do not make the user do setup.** If something cannot be fixed
 automatically, mention it once, in plain language, at the moment it actually matters — a missing
 Node install is irrelevant until they package a resume.
 
@@ -326,8 +327,13 @@ Nothing gets packaged without a current verification record. `scripts/verify_one
 `scripts/gate.py` enforces.
 
 ```
-python3 scripts/verify_one.py --platform greenhouse --board acme --req 4056789
+<python> scripts/verify_one.py --platform greenhouse --board acme --req 4056789
 ```
+
+**`<python>` is whatever this machine calls Python 3.** `scripts/preflight.py` reports the exact
+interpreter path in its `python` field -- use that, and reuse it for every later call. Do not
+assume `python3`: a default Windows install provides `python` and `py -3` and no `python3` at
+all, so a guessed command fails there with nothing explaining why.
 
 It prints the requirements and records the role as **unread**. Read them, then re-run with
 `--requirements-reviewed`. The two-step is the point: a script cannot judge whether someone meets

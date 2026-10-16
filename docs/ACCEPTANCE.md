@@ -4,6 +4,18 @@
 **Source:** authored by Codex, `.handoffs/skill-dev/from-codex/acceptance-contract-v1.md`,
 SHA-256 `57cf2a1246251aa1bccfbfc1ce01833bc62fff14f80a04d2aa07f6823a9ec26c` (verified on adoption).
 
+## Status corrections
+
+**A10 is UNPROVEN as of 2026-10-15.** It was recorded as passing on the strength of
+`tests/test_clean_install.py`, which relocates the repository and strips `node_modules` but
+launches the developer's existing interpreter through `sys.executable`. It therefore validated
+relocation, never the absence of tooling, and never ran on Windows. The first user outside the
+author, on Windows, could not get past the opening conversation.
+
+The real dependency closure is Python 3, Node, npm, and two npm packages fetched at first run.
+A10 stays unproven until a packaged artifact is exercised on a clean Windows machine with none
+of those present.
+
 ## Owner-approved scope exceptions
 
 **SE-1 (2026-10-01): Workday adapter is in scope for this release.** The contract scopes ATS

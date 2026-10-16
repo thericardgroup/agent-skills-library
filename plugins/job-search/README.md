@@ -56,10 +56,25 @@ including if you stop partway through and come back days later.
 **Claude Code specifically.** The skill fetches live job boards, which claude.ai restricts and the
 Claude API blocks entirely.
 
-Python 3 comes with macOS and most Linux systems. Node is only needed when you generate resume and
-cover letter files, and the skill will tell you at that point if it is missing. PDF export is a
-bonus on macOS with Microsoft Word installed; otherwise you get .docx, which every employer
-accepts.
+### You need Python 3 and Node installed
+
+This is the honest version, and it is a real barrier. The skill runs scripts, so both have to
+be on your computer before it can do anything past the opening conversation.
+
+**Windows:** neither comes with the operating system. Install **Python 3** from the Microsoft
+Store (search "Python 3" -- that version also provides the `python3` command, which the
+python.org installer does not) and **Node** from [nodejs.org](https://nodejs.org).
+
+**macOS:** Python 3 arrives with the Xcode command line tools, which you may already have. If
+not, run `xcode-select --install` in Terminal. Node comes from [nodejs.org](https://nodejs.org).
+
+**Linux:** both are in your package manager.
+
+An earlier version of this page said Python "comes with macOS and most Linux systems" and left
+Windows unmentioned. That was wrong, and the first person to install this on Windows hit it.
+
+PDF export is a bonus on macOS with Microsoft Word installed; otherwise you get .docx, which
+every employer accepts.
 
 ## Runtime, measured
 

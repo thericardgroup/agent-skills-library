@@ -48,6 +48,12 @@ def main():
                 )
 
     # PDF export is a nicety and macOS-only. Never block on it.
+    # The exact interpreter running this file. Everything downstream should use
+    # this path rather than guessing a command name: `python3` does not exist on
+    # a default Windows install, so a guessed command fails silently there.
+    report["python"] = sys.executable
+    report["platform"] = sys.platform
+
     report["pdf_available"] = sys.platform == "darwin" and os.path.isdir(
         "/Applications/Microsoft Word.app")
 

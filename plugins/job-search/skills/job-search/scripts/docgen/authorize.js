@@ -10,7 +10,7 @@
 // candidate's stated constraints, at this time. Anything the approval does not
 // name is not covered by it.
 const { loadState, loadProfile } = require('./state');
-const { execFileSync } = require('child_process');
+const { runPython } = require('./python');
 const path = require('path');
 
 // Identity comparison. Case and surrounding punctuation are formatting; the
@@ -37,7 +37,7 @@ function gateOpen(key, profilePath) {
   const args = [script, key];
   if (profilePath) args.push('--profile', profilePath);
   try {
-    execFileSync('python3', args, { stdio: 'pipe' });
+    runPython(args, { stdio: 'pipe' });
   } catch (e) {
     const msg = (e.stdout || Buffer.from('')).toString().trim() || e.message;
     throw new Error(`REFUSING to generate for "${key}": ${msg}`);
@@ -59,7 +59,7 @@ function authorize({ key, contents = [], profile, profilePath }) {
   if (!rec) {
     throw new Error(
       `REFUSING: no verification record for "${key}".\n` +
-      `Run:  python3 scripts/verify_one.py --key '${key}' --requirements-reviewed`);
+      `Run the verification step for '${key}' and read its requirements.`);
   }
 
   // The gate is evaluated against the profile that will actually be used, not

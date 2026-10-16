@@ -2,7 +2,7 @@
 // employment block twice. The docx packer never errors on missing content, so
 // check the bytes you actually wrote rather than the inputs you meant to write.
 const JSZip = require('jszip');
-const { execFileSync } = require('child_process');
+const { runPython } = require('./python');
 const path = require('path');
 const { loadProfile } = require('./state');
 
@@ -68,7 +68,7 @@ async function assertPasteSafe(text, label) {
 function requireVerified(key) {
   const script = path.join(__dirname, '..', 'gate.py');
   try {
-    execFileSync('python3', [script, key], { stdio: 'pipe' });
+    runPython([script, key], { stdio: 'pipe' });
   } catch (e) {
     const msg = (e.stdout || Buffer.from('')).toString().trim() || e.message;
     throw new Error(`REFUSING to generate package for "${key}": ${msg}`);

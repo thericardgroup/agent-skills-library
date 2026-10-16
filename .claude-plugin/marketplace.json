@@ -15,7 +15,7 @@
         "source": "git-subdir",
         "url": "https://github.com/thericardgroup/agent-skills-library.git",
         "path": "plugins/job-search",
-        "ref": "job-search--v0.1.1"
+        "ref": "job-search--v0.1.2"
       },
       "description": "Rigorous end-to-end job search for Claude Code: build a profile by interview, enumerate applicant-tracking boards directly, score against stated requirements, verify every role is still live before investing in it, and generate tailored resumes, cover letters and fit summaries.",
       "category": "productivity",
@@ -26,6 +26,25 @@
         "ats",
         "career",
         "hiring"
+      ]
+    },
+    {
+      "name": "linkedin-profile",
+      "source": {
+        "source": "git-subdir",
+        "url": "https://github.com/thericardgroup/agent-skills-library.git",
+        "path": "plugins/linkedin-profile",
+        "ref": "linkedin-profile--v0.1.0"
+      },
+      "description": "Audit and rebuild a personal LinkedIn profile: check the recruiter-facing settings that silently hide you from search, compare the profile against your resume line by line, align to roles you are actually targeting, rewrite headline, About and experience, repair link previews, then apply each approved change and verify it held.",
+      "category": "productivity",
+      "keywords": [
+        "linkedin",
+        "profile",
+        "resume",
+        "job search",
+        "career",
+        "personal branding"
       ]
     }
   ]

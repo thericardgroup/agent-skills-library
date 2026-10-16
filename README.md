@@ -21,6 +21,7 @@ Then install whichever skills you want:
 
 | Skill | What it does |
 |---|---|
+| [linkedin-profile](plugins/linkedin-profile) | Audit and rebuild a personal LinkedIn profile. Settings first: the recruiter-facing preferences that silently hide you from search. Then your profile against your resume, line by line, for the contradictions recruiters notice and candidates never check. Then the wording, aligned to roles you are actually pursuing. Applies each approved change and reads it back to confirm it held. |
 | [job-search](plugins/job-search) | A job search that works whether or not you know what you want. Knows? Profile by interview, read employer job boards directly, score against stated requirements, verify every role is live, generate tailored documents. Doesn't know? Work backwards from what you have done to the role families your record supports, with the evidence, then search those. |
 
 ## What these are built around

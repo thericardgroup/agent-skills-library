@@ -216,7 +216,8 @@ def verification_gate(key, profile=None):
     """
     d = load("verified.json").get(key)
     if not d:
-        return False, (f"never verified. Run:  python3 scripts/verify_one.py --key '{key}'")
+        return False, (f"never verified. Run scripts/verify_one.py --key '{key}' with "
+                       f"this machine's Python 3 command.")
 
     if d.get("status") == "failed":
         return False, (f"last check failed ({d.get('reason', 'unknown')}). "
