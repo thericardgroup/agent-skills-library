@@ -5,7 +5,11 @@ Free, open skills for [Claude Code](https://claude.com/claude-code), from
 
 ## Install
 
-Add the library once:
+**New to Claude Code?** Step-by-step guides with screenshots, no terminal needed:
+[install the Claude desktop app](https://www.thericardgroup.com/guides/install-claude-desktop), [add this library](https://www.thericardgroup.com/guides/claude-plugin-marketplace),
+then the skill you want. All guides: [thericardgroup.com/resources](https://www.thericardgroup.com/resources).
+
+Already in Claude Code? Add the library once:
 
 ```
 /plugin marketplace add thericardgroup/agent-skills-library
@@ -38,7 +42,10 @@ so this is enforced mechanically rather than promised.
 
 **Your data stays yours.** Skills write to `.claude/` in whatever directory you run them from,
 never into the installed skill. Updating a skill cannot touch your data, and deleting that
-folder is a complete erase.
+folder erases everything the skill saved. What you type or share in the conversation itself,
+such as a resume, goes to Anthropic so Claude can respond, like any Claude conversation, and is
+handled under your Claude account's privacy settings. The skills themselves contact only the
+sites they fetch.
 
 ## Requires
 

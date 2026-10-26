@@ -17,7 +17,13 @@ the whole entry requirement.
 
 ## Install
 
-New to Claude Code? You only need to copy and paste two lines. Open Claude Code and type:
+**New to Claude Code?** Follow the step-by-step guides, with screenshots and no terminal:
+[install the Claude desktop app](https://www.thericardgroup.com/guides/install-claude-desktop),
+[add this library](https://www.thericardgroup.com/guides/claude-plugin-marketplace),
+[install Python](https://www.thericardgroup.com/guides/install-python), [install Node](https://www.thericardgroup.com/guides/install-node),
+[install this skill](https://www.thericardgroup.com/guides/job-search-plugin) and [use it](https://www.thericardgroup.com/guides/using-job-search-plugin).
+
+Already in Claude Code? Two lines:
 
 ```
 /plugin marketplace add thericardgroup/agent-skills-library
@@ -27,7 +33,8 @@ New to Claude Code? You only need to copy and paste two lines. Open Claude Code 
 /plugin install job-search@agent-skills-library
 ```
 
-That is the whole setup. The skill installs its own dependencies the first time you use it.
+The skill installs its own packages the first time you use it. Python 3 and Node must already
+be on your computer; see [Requires](#requires).
 
 You only add the marketplace once. Any other skill in the library is a single install line
 after that.
@@ -69,6 +76,10 @@ python.org installer does not) and **Node** from [nodejs.org](https://nodejs.org
 not, run `xcode-select --install` in Terminal. Node comes from [nodejs.org](https://nodejs.org).
 
 **Linux:** both are in your package manager.
+
+Step-by-step guides with screenshots: [install Python](https://www.thericardgroup.com/guides/install-python) and
+[install Node](https://www.thericardgroup.com/guides/install-node). The skill needs Python 3.8 or newer; Node is only used to
+build the resume and cover letter files.
 
 An earlier version of this page said Python "comes with macOS and most Linux systems" and left
 Windows unmentioned. That was wrong, and the first person to install this on Windows hit it.
@@ -117,10 +128,15 @@ is uneven.
 
 ## Your data
 
-Everything the skill learns about you is written to `.claude/job-search/` in whatever directory
-you run it from, and nowhere else. It never goes into the skill's own folder, so updating the
-skill cannot touch it, and nothing is sent anywhere except the job boards it fetches postings
-from. Delete the folder and the skill has forgotten you.
+**Saved on your computer.** What the skill saves about you (profile, scored roles, progress) is
+written to `.claude/job-search/` in whatever directory you run it from. It never goes into the
+skill's own folder, so updating the skill cannot touch it. Delete that folder and the skill's
+saved data about you is gone.
+
+**Sent to Anthropic.** Like any Claude conversation, what you share in the chat -- your resume,
+your answers, postings you paste -- is sent to Anthropic so Claude can respond, and is handled
+under your Claude account's privacy settings, not by this skill. The skill's own scripts contact
+only the job boards they read.
 
 `references/schemas.md` documents exactly what is stored in each file.
 

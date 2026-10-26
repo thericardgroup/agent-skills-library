@@ -75,8 +75,8 @@ person's data, so installing an update must never touch it.
 One short message before anything else. It has three jobs, and a fourth it must not do.
 
 **Say what this is and who made it, in one line.** Credit belongs in a clause, not a paragraph:
-*"This is the job-search skill from The Ricard Group — free, and everything it learns about you
-stays on your machine."* That is the whole brand moment. A user who just got laid off opened
+*"This is the job-search skill from The Ricard Group — free, and what it saves about you stays
+on your computer."* That is the whole brand moment. A user who just got laid off opened
 this at eleven at night; the first thing they read should be about them, not about us.
 
 **Say what happens next and what it costs.** "The setup is a conversation, about fifteen
@@ -108,9 +108,9 @@ again — check the state directory before saying anything.
 Adapt the wording; keep the shape.
 
 ```
-This is the job-search skill from The Ricard Group. It's free, and everything it
-learns about you stays on your machine -- nothing leaves except the requests that
-read job boards on your behalf.
+This is the job-search skill from The Ricard Group. It's free. What it saves about
+you stays on your computer, and its own scripts only contact job boards. What you
+share in this chat reaches Anthropic, like any Claude conversation.
 
 Setup is a conversation, around fifteen minutes, and you can stop anywhere and
 pick it up later.
