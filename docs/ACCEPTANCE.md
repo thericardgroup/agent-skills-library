@@ -27,6 +27,38 @@ non-technology employers post. It is therefore a release prerequisite, tested un
 not a silent weakening of the criterion. Taleo, SuccessFactors and iCIMS remain out of scope
 and must be disclosed as unsupported.
 
+**SE-2 (2026-10-26): Patch releases for non-behavioral changes.** Owner-approved. Lets a fix
+that does not change what the skill does reach users without waiting on SE-1 (Workday) or the
+clean-Windows proof in A10.
+
+*Eligibility is judged on the whole release, not the latest commit.* Record the baseline (the
+last published tag the marketplace pins) and review the complete diff from that tag to the
+candidate, including dependencies and packaging. Every change in that diff must be one of:
+
+- user-facing wording that does not change what the skill does (messages, README, docs);
+- release metadata (version number, tag, marketplace pin, release notes).
+
+Anything that adds a network request, changes discovery, scoring, verification, approval
+binding, document generation, dependencies or stored-state format is not eligible, however
+small. The planned update notice is therefore not a patch change by default: it may ship under
+SE-2 only once all of the following exist, each with a test: one fixed trusted endpoint; no user
+or state data in the request; a short timeout that never blocks or delays startup; a response
+size limit; only a version string read back and validated; update instructions fixed in the
+skill, never taken from the response; and tests for offline, slow, malformed-response and
+missing-tool cases.
+
+*Still required for every patch release:* the full offline suite passing;
+`tools/check_no_personal_data.py` and `tools/check_marketplace.py` passing; evals unchanged or
+passing; `plugin.json` version bumped; the tag created on the reviewed commit before the
+marketplace pin moves to it; release notes that state what is deferred (Workday, clean Windows
+install) and how to roll back (re-pin the previous tag; user state in `.claude/job-search/` is
+untouched); and an independent Codex review of that candidate with no blocker.
+
+*Matrix recording:* only the two deferred items are marked "not run (SE-2)": the Workday adapter
+case under A08 and the clean-Windows install case under A10. Every other A08 and A10 requirement
+keeps its normal status and evidence. The owner approves each patch release explicitly; SE-2 is
+a path, not a standing approval.
+
 ---
 
 Status: owner requested this contract; implementation and test evidence remain pending.
