@@ -135,8 +135,12 @@ saved data about you is gone.
 
 **Sent to Anthropic.** Like any Claude conversation, what you share in the chat -- your resume,
 your answers, postings you paste -- is sent to Anthropic so Claude can respond, and is handled
-under your Claude account's privacy settings, not by this skill. The skill's own scripts contact
-only the job boards they read.
+under your Claude account's privacy settings, not by this skill.
+
+**What the skill's own scripts contact.** Job boards and employers' careers pages, to read
+postings; and, the first time you use it, the npm package registry, to download the two
+libraries that build the resume and cover letter files. A job-board request names only the
+employer or posting being looked up; none carries your resume, profile or answers.
 
 `references/schemas.md` documents exactly what is stored in each file.
 

@@ -109,8 +109,9 @@ Adapt the wording; keep the shape.
 
 ```
 This is the job-search skill from The Ricard Group. It's free. What it saves about
-you stays on your computer, and its own scripts only contact job boards. What you
-share in this chat reaches Anthropic, like any Claude conversation.
+you stays on your computer. Its own scripts read job listings and, once, download
+the tools that build your documents; they never send your resume or answers.
+What you share in this chat reaches Anthropic, like any Claude conversation.
 
 Setup is a conversation, around fifteen minutes, and you can stop anywhere and
 pick it up later.

@@ -59,6 +59,21 @@ case under A08 and the clean-Windows install case under A10. Every other A08 and
 keeps its normal status and evidence. The owner approves each patch release explicitly; SE-2 is
 a path, not a standing approval.
 
+**SE-3 (2026-10-26): job-search 0.1.3 ships with known gaps carried from 0.1.2.** Owner-approved,
+for that one release only. Independent review (Codex seq 21 and 23) found that 0.1.3 does not
+meet the release exit criteria on these points, none of them introduced by 0.1.3:
+
+- A05 fails: an output I/O failure partway through publishing can leave a mixed package with no
+  manifest (`scripts/docgen/package.js` copies file by file without rollback).
+- A06, A08, A09 and A10 have partial evidence: the cases named in
+  `docs/releases/job-search-v0.1.3.md` are unproven.
+
+Reason: 0.1.3 changes wording only, so it carries exactly the behavior already published as
+0.1.2, and holding it would keep an inaccurate privacy statement in front of users. These gaps
+stay open: they are recorded as fail or partial in the 0.1.3 matrix, not waived, and the next
+behavior release must close them or get a new, explicit owner decision. SE-3 grants nothing
+to any other release.
+
 ---
 
 Status: owner requested this contract; implementation and test evidence remain pending.
