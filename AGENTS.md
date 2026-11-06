@@ -49,6 +49,26 @@ your first reply.
 reads fine to you, say which parts you verified by actually trying to follow them, rather than
 which parts sounded reasonable.
 
+## If you are Claude
+
+**First: check for mail too.** Release and cross-thread context arrives in `.handoffs/release/`,
+one file per subject, newest by date. Read every file there before starting release work or
+before assuming the state of `main` matches the last tag. Those notes exist because more than one
+Claude session works on this repository and they do not share context.
+
+As of 2026-11-06 the open ones are:
+
+- `2026-10-26-v0.1.3-and-v0.1.4.md` — v0.1.3 shipped; **v0.1.4, the update notice, is still to
+  build**, with its SE-2 conditions listed there.
+- `2026-11-06-description-correction.md` — manifest and marketplace descriptions corrected on
+  `main` with **no version bump**, so `plugin.json` says 0.1.3 while `main` differs from the
+  v0.1.3 tag. The next release owns the bump.
+
+**Releases need Isaac's explicit OK before any commit, tag or push.** The workflow he chose: one
+Codex review per finished batch first, fix clear issues, re-run Codex once, then bring him one
+short summary with the verdict, red flags, and any disagreement with Codex. Lead with the answer,
+short sentences, at most three actions, and separate what he has to do from what is already done.
+
 ## The acceptance contract
 
 `docs/ACCEPTANCE.md` (v1) is the release standard: ten invariants A01-A10, the regression cases
