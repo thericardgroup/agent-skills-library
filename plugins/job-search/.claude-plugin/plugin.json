@@ -1,6 +1,6 @@
 {
   "name": "job-search",
-  "description": "Run a rigorous, end-to-end job search: interview-based profiling, direct applicant-tracking-system enumeration, requirement-level scoring, mandatory live verification before any document is generated, and tailored resumes, cover letters and fit summaries.",
+  "description": "Run a rigorous job search whether or not you know what role you want: build a profile by interview, or work backwards from your record to the two or three role families it supports; read applicant tracking systems directly; score openings against their stated requirements; verify every role is still live before investing in it; and generate tailored resumes, cover letters and interview prep.",
   "version": "0.1.3",
   "author": {
     "name": "The Ricard Group",
